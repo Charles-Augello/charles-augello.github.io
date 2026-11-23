@@ -1,0 +1,40 @@
+# Builds the finished site and attaches it to the run as a downloadable zip,
+# ready to upload to your own web server. Nothing is published anywhere.
+#
+# To use it: repository Actions tab > "Build site for own server" >
+# Run workflow. When it finishes (about a minute), open the run and download
+# the "augello-site-for-server" file listed under Artifacts at the bottom.
+
+name: Build site for own server
+
+on:
+  workflow_dispatch:
+    inputs:
+      strict:
+        description: "Fail if any yellow placeholder, missing image or broken link remains (use for the final upload)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build the site
+        run: |
+          if [ "${{ inputs.strict }}" = "true" ]; then
+            python3 build.py --strict
+          else
+            python3 build.py
+          fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: augello-site-for-server
+          path: dist
+          include-hidden-files: true   # keeps the .htaccess file
+          if-no-files-found: error
