@@ -17,7 +17,7 @@ env:
   # When you are ready to go live, change it to "true": the deploy will then
   # fail (and nothing is published) if any placeholder, image or link is
   # still unfinished.
-  STRICT_LAUNCH_CHECK: "false"
+  STRICT_LAUNCH_CHECK: "true"
 
 permissions:
   contents: read
